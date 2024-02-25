@@ -57,33 +57,33 @@ class Transaction(BaseModel):
 class CountResponse(BaseModel):
     count: int
 
-@app.get("/transactions/{block_number}", response_model=List[Transaction])
+@router.get("/transactions/{block_number}", response_model=List[Transaction])
 def read_transactions(block_number: int):
     transactions = list(db.transactions.find({"blockNumber": block_number}, {'_id': False}))
     if transactions:
         return transactions
     raise HTTPException(status_code=404, detail="Transactions not found")
 
-@app.get("/transactions/hash/{tx_hash}", response_model=Transaction)
+@router.get("/transactions/hash/{tx_hash}", response_model=Transaction)
 def read_transaction_by_hash(tx_hash: str):
     transaction = db.transactions.find_one({"hash": tx_hash}, {'_id': False})
     if transaction:
         return transaction
     raise HTTPException(status_code=404, detail="Transaction not found")
 
-@app.get("/transactions/address/{address}", response_model=List[Transaction])
+@router.get("/transactions/address/{address}", response_model=List[Transaction])
 def read_transactions_by_address(address: str, limit: int = 50):
     transactions = list(db.transactions.find({"$or": [{"from": address}, {"to": address}]}, {'_id': False}).limit(limit))
     if transactions:
         return transactions
     raise HTTPException(status_code=404, detail="Transactions not found")
 
-@app.get("/transactions/count/all", response_model=CountResponse)
+@router.get("/transactions/count/all", response_model=CountResponse)
 def get_transactions_count():
     count = db.transactions.count_documents({})
     return CountResponse(count=count)
 
-@app.get("/transactions/date", response_model=List[Transaction])
+@router.get("/transactions/date", response_model=List[Transaction])
 def read_transactions_by_date(start_date: str, end_date: str, limit: int = 50):
     start_timestamp = datetime.strptime(start_date, "%Y-%m-%d").timestamp()
     end_timestamp = datetime.strptime(end_date, "%Y-%m-%d").timestamp()

@@ -15,7 +15,7 @@ services:
     restart: unless-stopped
     environment:
       - MONGO_URI=mongodb://mongo:27017/
-      - RPC_URL=https://rpc-testnet.nimiqcloud.com/
+      - RPC_URL=YOURNODEHERE
       - START_BLOCK=16335524
     depends_on:
       - mongo

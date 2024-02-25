@@ -17,7 +17,7 @@ START_BLOCK = 16335524
 MONGO_URI = "mongodb://mongo:27017/"  # Adjust if you have a different MongoDB URI
 DB_NAME = "blockchainDB"
 COLLECTION_NAME = "transactions"
-RPC_URL = os.getenv("RPC_URL", "https://rpc-testnet.nimiqcloud.com/")  # Configurable RPC URL
+RPC_URL = os.getenv("RPC_URL", "http://node:8648/")  # Configurable RPC URL
 
 
 def update_last_indexed_block(block_number, db):
