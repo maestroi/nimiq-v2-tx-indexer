@@ -1,0 +1,33 @@
+version: '3.8'
+services:
+  mongo:
+    image: mongo
+    container_name: mongo
+    restart: unless-stopped
+    volumes:
+      - mongo-data:/data/db
+    ports:
+      - "27017:27017"
+
+  indexer:
+    build: ./indexer
+    container_name: indexer
+    restart: unless-stopped
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/
+      - RPC_URL=https://rpc-testnet.nimiqcloud.com/
+      - START_BLOCK=16335524
+    depends_on:
+      - mongo
+
+  api:
+    build: ./api
+    container_name: api
+    restart: unless-stopped
+    ports:
+      - "8000:80"
+    depends_on:
+      - mongo
+
+volumes:
+  mongo-data:
